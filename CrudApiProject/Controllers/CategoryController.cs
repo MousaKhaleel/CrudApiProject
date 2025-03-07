@@ -1,4 +1,5 @@
 ﻿using CrudApiProject.Data;
+using CrudApiProject.Dtos;
 using CrudApiProject.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -30,24 +31,26 @@ namespace CrudApiProject.Controllers
 		}
 
 		[HttpPost]
-		public IActionResult CreateCategory(Category category)
+		public IActionResult CreateCategory(CategoryDto categoryDto)
 		{
+			var category = new Category
+			{
+				CategoryName = categoryDto.CategoryName,
+			};
 			_context.Categories.Add(category);
 			_context.SaveChanges();
-			return Ok("sucsesfully");
+			return Ok("Created sucsesfully");
 		}
 
 		[HttpPut("{id}")]
-		public IActionResult UpdateCategory(int id, Category category)
+		public IActionResult UpdateCategory(int id, CategoryDto categoryDto)
 		{
-			if (id != category.CategoryId)
-				return BadRequest();
 			var existingCategory = _context.Categories.Find(id);
 			if (existingCategory == null)
 				return NotFound("Category not found.");
-			existingCategory.CategoryName = category.CategoryName;
+			existingCategory.CategoryName = categoryDto.CategoryName;
 
-			_context.Categories.Update(category);
+			_context.Categories.Update(existingCategory);
 			_context.SaveChanges();
 			return Ok("updated sucsesfully");
 		}

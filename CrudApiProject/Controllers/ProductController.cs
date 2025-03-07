@@ -1,4 +1,5 @@
 ﻿using CrudApiProject.Data;
+using CrudApiProject.Dtos;
 using CrudApiProject.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -27,26 +28,32 @@ namespace CrudApiProject.Controllers
 			return Ok(product);
 		}
 		[HttpPost]
-		public IActionResult CreateProduct(Product product)
+		public IActionResult CreateProduct(ProductDto productDto)
 		{
+			var product = new Product
+			{
+				ProductName = productDto.ProductName,
+				Price = productDto.Price,
+				Description = productDto.Description,
+				CategoryId = productDto.CategoryId,
+			};
 			_context.Products.Add(product);
 			_context.SaveChanges();
 			return Ok("product created sucsesfully");
 		}
 
 		[HttpPut("{id}")]
-		public IActionResult UpdateProduct(int id, Product product)
+		public IActionResult UpdateProduct(int id, ProductDto productDto)
 		{
-			if (id != product.ProductId)
-				return BadRequest();
 			var existingProduct = _context.Products.Find(id);
 			if (existingProduct == null)
 				return NotFound("Product not found.");
-			existingProduct.ProductName = product.ProductName;
-			existingProduct.Price = product.Price;
-			existingProduct.Description = product.Description;
+			existingProduct.ProductName = productDto.ProductName;
+			existingProduct.Price = productDto.Price;
+			existingProduct.Description = productDto.Description;
+			existingProduct.CategoryId = productDto.CategoryId;
 
-			_context.Products.Update(product);
+			_context.Products.Update(existingProduct);
 			_context.SaveChanges();
 			return Ok("updated sucsesfully");
 		}
