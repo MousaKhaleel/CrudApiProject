@@ -19,12 +19,24 @@ namespace CrudApiProject.Controllers
 		[HttpGet]
 		public IActionResult GetProducts()
 		{
-			return Ok(_context.Products.Include(p => p.Category).ToList());
+			return Ok(_context.Products.Select(p => new
+			{
+				p.ProductId,
+				p.ProductName,
+				CategoryId = p.Category.CategoryId,
+				CategoryName = p.Category.CategoryName
+			}).ToList());
 		}
 		[HttpGet("{id}")]
 		public IActionResult GetProduct(int id)
 		{
-			var product = _context.Products.Include(p => p.Category).FirstOrDefault(p => p.ProductId == id);
+			var product = _context.Products.Select(p => new
+			{
+				p.ProductId,
+				p.ProductName,
+				CategoryId = p.Category.CategoryId,
+				CategoryName = p.Category.CategoryName
+			}).FirstOrDefault(p => p.ProductId == id);
 			return Ok(product);
 		}
 		[HttpPost]

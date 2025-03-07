@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CrudApiProject.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20250307202520_initial")]
+    [Migration("20250307203437_initial")]
     partial class initial
     {
         /// <inheritdoc />
